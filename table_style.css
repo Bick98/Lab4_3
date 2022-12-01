@@ -1,0 +1,12 @@
+.card{
+            padding: 16px;
+            background: wheat;
+            margin: 18px;
+            border-radius: 17px;
+            width: 300px;
+        }
+.set {
+    max-width: 200px;
+    margin-bottom: 20px;
+    background: sandybrown;
+}

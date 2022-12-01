@@ -1,0 +1,106 @@
+<head>
+    <link rel="stylesheet" href="table_style.css">
+
+    {% macro filters(rel, checked, label) %}
+    {% set n = len(rel) %}
+    <fieldset class="set">
+        <p>{{ label }}</p>
+        {% for i in range(n) %}
+        <div>
+            {% set id_r = rel.loc[i, rel.columns[0]] %}
+            {% if id_r == 1 %}
+                <input type="checkbox" checked="true">
+                <label>{{ rel.loc[i, rel.columns[1]] }}</label>
+            {% else %}
+                <input type="checkbox" >
+                <label>{{ rel.loc[i, rel.columns[1]] }}</label>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </fieldset>
+    {% endmacro %}
+
+    {% macro filters2(rel, checked, label) %}
+    {% set n = len(rel) %}
+    <fieldset class="set">
+        <p>{{ label }}</p>
+        {% for i in range(n) %}
+        <div>
+            {% set id_r = rel.loc[i, rel.columns[0]] %}
+            {% if id_r in checked %}
+                <input type="checkbox" checked="true">
+                <label>{{ rel.loc[i, rel.columns[1]] }}</label>
+            {% else %}
+                <input type="checkbox" >
+                <label>{{ rel.loc[i, rel.columns[1]] }}</label>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </fieldset>
+    {% endmacro %}
+
+     {% macro list(rel, checked, label) %}
+    <div style="margin: 30px" c>
+        <p style="color: forestgreen; margin: 1px">{{ "&nbsp;"}} <b> {{ label }}: </b>
+    {% if len(checked) != 0 %}
+        {% set n = len(rel) %}
+        {% for i in range(n) %}
+            {% set id_r = rel.loc[i, rel.columns[0]] %}
+        {% if id_r in checked %}
+    <li>{{ rel.loc[i, rel.columns[1]] }}</li>
+{% endif %}
+
+        {% endfor %}
+    </p>
+    {% endif %}
+    </div>
+    {% endmacro %}
+
+    {% macro cards(card) %}
+    {% set n = len(card) %}
+    {% for i in range(n) %}
+        <div class="card">
+            {% for name in card.dtypes.index %}
+            <p><b>{{ name }}:</b> {{ card.loc[i, name] }}</p>
+            {% endfor %}
+            <div>
+                <button  type="submit">Выбрать</button>
+            </div>
+        </div>
+    {% endfor %}
+    {% endmacro %}
+    <title>Выбор книг</title>
+</head>
+<body>
+<div style="display: inline-flex">
+    <div style="min-width: 250px">
+        {{filters2(df_authors, checked_authors, 'Авторы')}}
+        {{filters2(df_genres, checked_genres, 'Жанры', )}}
+        {{filters2(df_publishers, checked_publishers, 'Издатели')}}
+        <br>
+        <button type="submit">Найти</button>
+        <button type="submit">Очистить</button>
+    </div>
+    <div>
+        <div style="display: inline-flex">
+
+           {% if len(checked_authors) != 0%}
+                {{list(df_authors, checked_authors, 'Авторы')}}<br>
+            {% endif %}
+
+            {% if len(checked_genres) == 0%}
+                {{list(df_genres, checked_genres, 'Жанры')}}<br>
+            {% endif %}
+
+            {% if len(checked_publishers) == 0%}
+                {{list(df_publishers, checked_publishers, 'Издатели')}}
+            {% endif %}
+
+        </div>
+        <div style="display: flex; flex-wrap: wrap">
+            {{cards(card)}}
+        </div>
+    </div>
+</div>
+</body>
+</html>
